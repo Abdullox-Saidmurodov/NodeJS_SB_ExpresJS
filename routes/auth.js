@@ -18,8 +18,21 @@ router.get('/register', (req, res) => {
     })
 })
 
-router.post('/login', (req, res) => {
-    console.log(req.body)
+router.post('/login', async (req, res) => {
+    // console.log(req.body)
+    const existUser = await User.findOne({email: req.body.email})
+    if(!existUser) {
+        console.log('User not found')
+        return
+    }
+
+    const isPassEqual = await bcrypt.compare(req.body.password, existUser.password)
+    if(!isPassEqual) {
+        console.log('Password wrong')
+        return
+    }
+
+    // console.log(existUser)
     res.redirect('/')
 })
 
@@ -29,7 +42,7 @@ router.post('/register', async (req, res) => {
     const userData = {
         firstName: req.body.firstname,
         lastName: req.body.lastname,
-        email: req.body.lastname,
+        email: req.body.email,
         password: hashedPassword,
     }
     // console.log(userData)
