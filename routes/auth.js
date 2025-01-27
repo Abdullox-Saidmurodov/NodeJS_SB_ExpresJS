@@ -1,4 +1,5 @@
 import {Router} from 'express'
+import User from '../models/User.js'
 
 const router = Router()
 
@@ -21,8 +22,17 @@ router.post('/login', (req, res) => {
     res.redirect('/')
 })
 
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
     console.log(req.body)
+    const userData = {
+        firstName: req.body.firstname,
+        lastName: req.body.lastname,
+        email: req.body.lastname,
+        password: req.body.password,
+    }
+    // console.log(userData)
+    const user = await User.create(userData)
+    // console.log(user)
     res.redirect('/')
 })
 
