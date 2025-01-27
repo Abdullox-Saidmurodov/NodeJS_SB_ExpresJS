@@ -3,10 +3,7 @@ import {Router} from 'express'
 const router = Router()
 
 router.get('/', (req, res) => {
-    // res.send('Main page')
-    // res.status(200)
     res.render('index')
-    // res.end()
 })
 
 router.get('/products', (req, res) => {
