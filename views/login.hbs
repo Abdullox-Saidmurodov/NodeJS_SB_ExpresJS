@@ -1,5 +1,12 @@
 {{!-- <h1>Login</h1> --}}
-<div class="fs-1">Login</div>
+<p class="fs-1">Login</p>
+{{#if loginError}}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error!</strong> {{loginError}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {{!-- <p>{{loginError}}</p> --}}
+{{/if}}
 <form action="/login" method="post">
     <div class="form-floating mb-3">
         <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com">

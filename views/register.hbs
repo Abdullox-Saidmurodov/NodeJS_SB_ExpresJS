@@ -1,5 +1,12 @@
 {{!-- <h1>Register</h1> --}}
 <div class="fs-1">Register</div>
+{{#if registerError}}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error!</strong> {{registerError}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {{!-- <p>{{registerError}}</p> --}}
+{{/if}}
 <form action="/register" method="post">
     <div class="d-flex gap-3">
         <div class="form-floating mb-3 w-50">
