@@ -70,6 +70,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
     const {firstname, lastname, email, password} = req.body
+    
     if(!firstname || !lastname || !email || !password) {
         req.flash('registerError', 'All fields are requider')
         res.redirect('/register')
