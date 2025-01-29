@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 router.get('/products', async (req, res) => {
     const user = req.userId ? req.userId.toString() : null
     const myProducts = await Product.find({user}).populate('user').lean()
-    console.log(myProducts)
+    // console.log(myProducts)
     res.render('products', {
         title: 'Products | AB',
         isProducts: true,
@@ -30,10 +30,6 @@ router.get('/products', async (req, res) => {
 })
 
 router.get('/add', authMiddleware, (req, res) => {
-    // if(!req.cookies.token) {
-    //     res.redirect('/login')
-    //     return
-    // }
     res.render('add', {
         title: 'Add products',
         isAdd: true,
@@ -42,18 +38,24 @@ router.get('/add', authMiddleware, (req, res) => {
 })
 
 router.get('/product/:id', async (req, res) => {
-    // console.log(req.params)
     const id = req.params.id
     const product = await Product.findById(id).populate('user').lean()
-    // console.log(product)
-    // res.send('Product detail')
     res.render('product', {
         product: product,
     })
 })
 
+router.get('/edit-product/:id', async (req, res) => {
+    const id = req.params.id
+    const product = await Product.findById(id).populate('user').lean()
+
+    res.render('edit-product', {
+        product: product,
+        errorEditProduct: req.flash('errorEditProduct')
+    })
+})
+
 router.post('/add-products', userMiddleware, async (req, res) => {
-    // console.log(req.body)
     const {title, description, image, price} = req.body
     if(!title || !description || !image || !price) {
         req.flash('errorAddProducts', 'All fields are requider')
@@ -61,10 +63,31 @@ router.post('/add-products', userMiddleware, async (req, res) => {
         return
     }
 
-    console.log(req.userId)
-    // const products = await Product.create({...req.body, user: req.userId})
     await Product.create({...req.body, user: req.userId})
-    // console.log(products)
+    res.redirect('/')
+})
+
+router.post('/edit-product/:id', async (req, res) => {
+    // console.log(req.body)
+    const {title, description, image, price} = req.body
+    const id = req.params.id
+    if(!title || !description || !image || !price) {
+        req.flash('errorEditProduct', 'All fields are requider')
+        res.redirect(`/edit-product/${id}`)
+        return
+    }
+
+    // console.log(id)
+    const product = await Product.findByIdAndUpdate(id, req.body, {new: true})
+    console.log(product)
+
+    res.redirect('/products')
+})
+
+router.post('/delete-product/:id', async (req, res) => {
+    const id = req.params.id
+
+    await Product.findByIdAndDelete(id)
     res.redirect('/')
 })
 
